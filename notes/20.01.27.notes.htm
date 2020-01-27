@@ -1,0 +1,158 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>INFO 3300 - January 27</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+</head>
+<body>
+  <div class="container larger">
+    <h3>Prompt for Monday, January 28</h3>
+    <p>
+    	HW1 is available on <a href="https://canvas.cornell.edu/courses/10131/">Canvas</a>. No extensions will be offered to those on the waitlist. If you can't access Canvas, contact the staff email address. <br/>
+    	Sign up for <a href="https://campuswire.com/p/GF8A0A226">CampusWire</a>. The signup PIN is 2702.
+    </p>
+    <p>
+      Several INFO classes are participating in a Cornell-wide effort to improve classroom experiences. As a part of this project, we are taking baseline readings through a short survey quiz. This quiz is UNGRADED and I will not have access to your individual answers. Participation is voluntary. <br/>
+      If you choose to complete the survey, you will be awarded 10 points of extra credit on HW1. Access the survey <a href="https://cornell.qualtrics.com/jfe/form/SV_6rod1qwsSMtrEZ7">here</a>. Survey closes at 6PM on Wednesday.
+    <p>
+      You can access these files from the <a href="https://github.com/jeffrz/info3300-spr2020">course Github repository</a> Here is an <a href="http://rogerdudler.github.io/git-guide/">informal guide to git</a>.
+    </p>
+    <p>
+      To develop efficiently, have a local web server running. Python has a simple, built-in server. Use <tt>python -m http.server</tt> for python 3; use <tt>python -m SimpleHTTPServer 8000</tt> for python 2 (execute python in cmd for version number).
+    </p>
+    <p>
+      We will be working in Javascript for most of the term. It can act pretty oddly, especially in comparison to languages that strictly type objects. <br/>
+      What are some of the unusual aspects of this language? Open a console in your browser...
+    </p>
+    <p>
+      Time permitting, let's review <a href="http://www.json.org">Javascript Object Notation</a>.
+    </p>
+    
+    
+    <!-- This block will be automatically filled with syntax-highlighted code from the script below -->
+    <h5>Code for today:</h5>
+    <pre>
+      <code id="display1" class="hljs javascript">
+      </code>
+      <code id="display2" class="hljs javascript">
+      </code>
+    </pre>
+
+
+    <!--- Code for today's class --->
+    <script id="notes1">
+
+      // Try pasting these commands into your browser console
+      
+      // Console.log is our friend
+      console.log('Hello World');
+
+      // Let's explore some Javascript types!
+      console.log("Numbers!");
+      console.log(typeof(1));
+      console.log(typeof(1.2));
+      console.log(typeof(Math.PI));
+      console.log("Strings!");
+      console.log(typeof("hello"));
+      console.log(typeof('hello'));
+      console.log("Classes?");
+      console.log(typeof(Math));
+      console.log("Objects?");
+      console.log(new Object());
+      console.log(typeof(/regex/));
+      console.log("Functions?");
+      // It's more complicated -- functions are also objects
+      console.log(typeof( console.log ));
+      console.log("Undefined and null?");
+      console.log(typeof(undefined));
+      // Second bit of weirdness -- it shows as object but its type actually is null (legacy reasons)
+      console.log(typeof(null));     
+      // Test some unicode  (note <meta> tag in file)
+      console.log("What about unicode?");
+      console.log("パソコン");
+      console.log(typeof("パソコン"));
+      
+      // Learn a bit more about Objects
+      console.log("Lists and dicts")
+      let list = [1, 2, 3];
+      console.log( list );
+      console.log(typeof( list )); 
+      // It says it's an object -- but arrays are a special kind of object (see length property)
+      let dict = {"a": 1, "b": 2};
+      console.log( dict );
+      console.log(dict["a"]);
+      console.log(dict.a); // shortcut to access properties with plain text names
+      // Every object is a dictionary in Javascript -- properties function as key/value pairs
+      // Though it's a terrible idea, you can add properties to a list even!
+      list["testing"] = "don't do this";
+      console.log( list.testing );
+      
+      // A simple comparison?
+      console.log(0 == '0'); //  ???
+
+      // Type coercion
+      console.log(3 + "Rzeszotarski");
+      console.log("1" + 2);
+      console.log(1 + "2");
+      console.log(4 + true);
+      console.log(true + false);
+      console.log("true" + false);
+      // Only possibilities: ->string,  ->number,  ->boolean
+      // Learn more at https://www.freecodecamp.org/news/js-type-coercion-explained-27ba3d9a2839/
+      
+      // Comparison weirdness
+      console.log(0 == '0'); // aggressive casting
+      console.log('0' == 0);
+      console.log('0' === 0); // explicit comp
+      // Learn more at https://dorey.github.io/JavaScript-Equality-Table/
+      
+      //  null, undefined, and NaN are special cases
+      console.log(6 + null);
+      console.log(null == 0);
+      console.log(null == undefined);
+      console.log(NaN == NaN);
+      console.log([1,2,3] == [1,2,3]); // coercion can lead to confusing behaviors
+      
+
+      // Shortcircuiting of logical statements
+      console.log("Shortcircuiting");
+      true || console.log("logged-or") || false; // true short-circuits the OR and console.log doesn't trigger
+      true && console.log("logged-and") && false; // true does not short-circuit an AND so console.log triggers
+
+      let test = "script tags. how do they work?";
+
+    </script>
+
+
+    <script id="notes2">
+    
+      // How do two script tags interact with each other?
+      console.log(test);
+      
+
+    </script>
+    
+    
+    
+    
+    
+
+    <!--- calls the highlight library to fill the <pre> tag with code --->
+    <script>
+    document.getElementById("display1").innerText = document.getElementById("notes1").innerText;
+    document.getElementById("display2").innerText = document.getElementById("notes2").innerText;
+    hljs.initHighlightingOnLoad();
+    </script>
+
+  </div>
+</body>
+</html>
