@@ -1,0 +1,147 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>INFO 3300 - January 27</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+</head>
+<body>
+  <div class="container larger">
+    <h3>Prompt for Monday, January 28</h3>
+    <p>
+    	HW1 is available on <a href="https://canvas.cornell.edu/courses/10131/">Canvas</a>. No extensions will be offered to those on the waitlist. If you can't access Canvas, contact the staff email address. <br/>
+    	Sign up for <a href="https://campuswire.com/p/GF8A0A226">CampusWire</a>. The signup PIN is 2702.
+    </p>
+    <p>
+      Several INFO classes are participating in a Cornell-wide effort to improve classroom experiences. As a part of this project, we are taking baseline readings through a short survey quiz. This quiz is UNGRADED and I will not have access to your individual answers. Participation is voluntary. <br/>
+      If you choose to complete the survey, you will be awarded 10 points of extra credit on HW1. Access the survey <a href="https://cornell.qualtrics.com/jfe/form/SV_6rod1qwsSMtrEZ7">here</a>. Survey closes at 6PM on Wednesday.
+    <p>
+      You can access these files from the <a href="https://github.com/jeffrz/info3300-spr2020">course Github repository</a> Here is an <a href="http://rogerdudler.github.io/git-guide/">informal guide to git</a>.
+    </p>
+    <p>
+      To develop efficiently, have a local web server running. Python has a simple, built-in server. Use <tt>python -m http.server</tt> for python 3; use <tt>python -m SimpleHTTPServer 8000</tt> for python 2 (execute python in cmd for version number).
+    </p>
+    <p>
+      We will be working in Javascript for most of the term. It can act pretty oddly, especially in comparison to languages that strictly type objects. <br/>
+      What are some of the unusual aspects of this language? Open a console in your browser...
+    </p>
+    <p>
+      Time permitting, let's review <a href="http://www.json.org">Javascript Object Notation</a>.
+    </p>
+    
+    
+    <!-- This block will be automatically filled with syntax-highlighted code from the script below -->
+    <h5>Code for today:</h5>
+    <pre>
+      <code id="display1" class="hljs javascript">
+      </code>
+      <code id="display2" class="hljs javascript">
+      </code>
+    </pre>
+
+
+    <!--- Code for today's class --->
+    <script id="notes1">
+
+      // Try pasting these commands into your browser console
+      
+      // Console.log is our friend
+      console.log('Hello World');
+
+      // Let's explore some Javascript types!
+      
+      
+      // Test some unicode  (note <meta> tag in file)
+
+
+      // Learn a bit more about Objects
+      
+      
+      // A simple comparison?
+
+
+      // Type coercion
+      
+      
+      
+      // Learn more at https://www.freecodecamp.org/news/js-type-coercion-explained-27ba3d9a2839/
+      
+      
+      // Comparison weirdness
+      
+      
+      
+      // Learn more at https://dorey.github.io/JavaScript-Equality-Table/
+      
+
+      // Shortcircuiting of logical statements
+
+
+      // Now let's play with scoping of variables
+      //  we have two different declarations, let and var
+      //  (only use let!)
+      
+      /*
+      var fruit = "orange";
+      var veg = "carrot";
+      if (fruit === "orange") {
+        let fruit = "apple";
+        var veg = "leek";
+        console.log("--in if");
+        console.log(fruit);
+        console.log(veg);
+      }
+      console.log("--out if");
+      console.log(fruit);
+      console.log(veg);
+      */
+      
+
+      // let test = "testing";
+
+    </script>
+
+
+    <script id="notes2">
+    
+      // How do two script tags interact with each other?
+      // console.log(test);
+      
+      // * Let's talk JSON
+      // JSON is used as a way to convey complex data over the web (e.g. getting data from an API elsewhere)
+      // Key benefit over something like serialization is that it is standardized and very human-readable
+
+      let obj = [{"name":"DDWA", "number":3300 },{"name": "Java", "number": 2110},{"name": "Python", "number": 1110}];
+
+      // This one won't parse because it breaks JSON specifications
+      let badStr = '{"list": ["commas,", "single_quo\'tes", "double_quo"tes", "@sÃ§i|"], "nestedObject": {"undefined": undefined, "defined": 3.1415926535}, "Infinity": Infinity, "NaN": NaN, "bool": true}'
+      
+      // Done incorrectly, the JSON parser can make you think you've fixed errors
+      let fib = '[1; 2; 3; 5; 7; 12]';
+      
+
+    </script>
+    
+    
+    
+    
+    
+
+    <!--- calls the highlight library to fill the <pre> tag with code --->
+    <script>
+    document.getElementById("display1").innerText = document.getElementById("notes1").innerText;
+    document.getElementById("display2").innerText = document.getElementById("notes2").innerText;
+    hljs.initHighlightingOnLoad();
+    </script>
+
+  </div>
+</body>
+</html>
