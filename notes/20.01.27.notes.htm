@@ -15,7 +15,7 @@
 </head>
 <body>
   <div class="container larger">
-    <h3>Prompt for Monday, January 28</h3>
+    <h3>Prompt for Monday, January 27</h3>
     <p>
     	HW1 is available on <a href="https://canvas.cornell.edu/courses/10131/">Canvas</a>. No extensions will be offered to those on the waitlist. If you can't access Canvas, contact the staff email address. <br/>
     	Sign up for <a href="https://campuswire.com/p/GF8A0A226">CampusWire</a>. The signup PIN is 2702.
@@ -117,16 +117,17 @@
       
       //  null, undefined, and NaN are special cases
       console.log(6 + null);
-      console.log(null == 0);
-      console.log(null == undefined);
-      console.log(NaN == NaN);
-      console.log([1,2,3] == [1,2,3]); // coercion can lead to confusing behaviors
+      console.log(null === 0);
+      console.log(null === undefined);
+      console.log(NaN === NaN);
+      console.log([1,2,3] === [1,2,3]);
       
 
       // Shortcircuiting of logical statements
       console.log("Shortcircuiting");
       true || console.log("logged-or") || false; // true short-circuits the OR and console.log doesn't trigger
       true && console.log("logged-and") && false; // true does not short-circuit an AND so console.log triggers
+      false && console.log("logged-and") && false; // false short-circuits the AND so console.log doesn't trigger
 
       let test = "script tags. how do they work?";
 

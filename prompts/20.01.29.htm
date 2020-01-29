@@ -1,0 +1,184 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>INFO 3300 - January 29</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+</head>
+<body>
+  <div class="container larger">
+    <h3>Prompt for Monday, January 29</h3>
+    <p>
+      Execute a <tt>git pull</tt> in your repository directory to download new files. Prompt files won't change after posting, so feel free to modify them as you like. Here once again is an <a href="http://rogerdudler.github.io/git-guide/">informal guide to git</a>.
+    </p>
+    <p>
+      Several INFO classes are participating in a Cornell-wide effort to improve classroom experiences. As a part of this project, we are taking baseline readings through a short survey quiz. This quiz is UNGRADED and I will not have access to your individual answers. Participation is voluntary. <br/>
+      If you choose to participate by completing the survey, you will be awarded 10 points of extra credit on HW1. Access the survey <a href="https://cornell.qualtrics.com/jfe/form/SV_6rod1qwsSMtrEZ7">here</a>. Survey closes at 6PM on Wednesday.
+    <p>
+      You can access these files from the <a href="https://github.com/jeffrz/info3300-spr2020">course Github repository</a>. The repository will be updated with notes shortly after class. While I encourage you to make use of a local copy of the repository so you can take notes, the version at this site will always be up-to-date and accessible. Here is an <a href="http://rogerdudler.github.io/git-guide/">informal guide to git</a>.
+    </p>
+    <p>
+      To develop efficiently, have a local web server running. Python has a simple, built-in server. Use <tt>python -m http.server</tt> for python 3; use <tt>python -m SimpleHTTPServer 8000</tt> for python 2 (execute python in cmd for version number).
+    </p>  
+    <p>
+        How does Javascript differ among popular web browsers? <a href="https://caniuse.com/">Can I Use</a> breaks down browser support and <a href="https://en.wikipedia.org/wiki/Usage_share_of_web_browsers">Browser Usage</a> on Wikipedia shows current market share. Count on your TAs using recent Chrome browsers to evaluate your assignments, but remember that much of the world is not. Even browser usage stats can be misleading if you are intending for your site to be used by members of the Global South.
+      </p>
+    <p>
+      Let's review <a href="http://www.json.org">Javascript Object Notation</a>.
+    </p>
+    
+  
+    <h5>HTML for today:</h5>
+
+    <!-- Here's a standard HTML div element with an ID and a class -->
+    <div id="d1" class="header" style="color: red;">
+      Hello.
+    </div>
+
+    <!-- Here's an SVG canvas element. Note that in this file it looks like the <div> above. -->
+    <svg height="200" width="200">
+      <!-- Visual elements are represented by tags, which have attributes -->
+      <rect x="50" y="30" r="30" width="40" height="50" id="rect1" style="fill: rgb(0, 200, 20); stroke-width: 5; stroke: black;"></rect>
+      <rect x="100" y="30" r="30" width="40" height="25" id="rect2" style="fill: rgb(0, 20, 200); stroke-width: 5; stroke: black;"></rect>
+    </svg>
+
+    <!-- Here are two types of form inputs. -->
+    <input id="entry" type="text" value="Hello?">
+    <input id="slider" type="range" min="30" max="150" value="50">
+    
+    
+    <!-- This block will be automatically filled with syntax-highlighted code from the script below -->
+    <h5>Code for today:</h5>
+    <pre>
+      <code id="display1" class="hljs javascript">
+      </code>
+      <code id="display2" class="hljs javascript">
+      </code>
+    </pre>
+
+
+    <!--- Code for today's class --->
+    <script id="notes1">
+    
+      // From last class...
+      //  Type coercion can get you into trouble
+      dataset = [1,2,3,"four","5",6,7];
+      console.log(dataset);
+      
+    
+
+      // Now let's play with scoping of variables
+      //  we have two different declarations, let and var
+      //  (only use VAR if you really mean it!)
+      var fruit;
+      var veg;
+      
+
+
+      
+      // Let's look at scopes in script tags
+      
+      
+      // Let's look at hoisting of variables
+      
+      
+      
+      // * Let's talk JSON
+      // JSON is used as a way to convey complex data over the web (e.g. getting data from an API elsewhere)
+      // Key benefit over something like serialization is that it is standardized and very human-readable
+
+      let obj = [{"name":"DDWA", "number":3300 },{"name": "Java", "number": 2110},{"name": "Python", "number": 1110}];
+      console.log(obj);
+
+
+
+      // This one won't parse because it breaks JSON specifications
+      let badStr = '{"list": ["commas,", "single_quo\'tes", "double_quo"tes", "@sÃ§i|"], "nestedObject": {"undefined": undefined, "defined": 3.1415926535}, "Infinity": Infinity, "NaN": NaN, "bool": true}'
+      //console.log(JSON.parse(badStr));
+      
+      // Here is the fixed version, note escaped quotes, eliminated undefined, and no reserved numbers
+      // The \' is present because I used '' to create the string and need to escape quotes within it
+      // The \\" is present to escape the backslash so that the JSON string has \" in it, which is a required by the spec
+      let goodStr;
+      
+      
+      // Done incorrectly, the JSON parser can make you think you've fixed errors
+      //var fib = '[1; 2; 3; 5; 7; 12]';
+    
+
+      // * Functions and loops in c/java style and functional style.
+      //   (to learn more about functions, check out http://ejohn.org/apps/learn/)
+
+      // The more familiar format specifies a name for the function.
+      
+      
+
+      // We can also declare an "anonymous" function and then give it a name.
+      
+
+      // We can pass a function as an argument. Note the difference between
+      //  f and f(). One is the function itself
+      
+      
+
+
+      // We can return functions from functions. Functions remember the variables
+      //  that were available when they were defined. This can enable lazy evaluation
+      
+      
+      
+      //  ...but unlike some functional programming languages, this has some overhead so it isn't a great pattern to use for everything
+
+      // ** We'll learn a more efficient way to declare functions in a couple of weeks
+
+
+      // BONUS - If we have time
+      // * Modify the text and attributes of the text tag.
+      
+      
+
+
+      // * Modify attributes and styles of an SVG shape.
+      
+      
+
+
+      // * Set an event listener that connects the slider tool with the SVG rects.
+      
+      
+
+      
+      
+    </script>
+
+
+    <script id="notes2">
+    
+      // How do two script tags interact with each other?
+      console.log(test);
+
+    </script>
+    
+    
+    
+    
+    
+
+    <!--- calls the highlight library to fill the <pre> tag with code --->
+    <script>
+    document.getElementById("display1").innerText = document.getElementById("notes1").innerText;
+    document.getElementById("display2").innerText = document.getElementById("notes2").innerText;
+    hljs.initHighlightingOnLoad();
+    </script>
+
+  </div>
+</body>
+</html>
