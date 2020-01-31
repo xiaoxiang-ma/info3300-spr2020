@@ -70,13 +70,14 @@
     
       // From last class...
       //  Type coercion can get you into trouble
-      // dataset = [1,2,3,"four","5",6,7];
-      // console.log(dataset);
-      // for ( let i = 0; i < dataset.length;  i++ ) {
-      //     console.log( dataset[i], dataset[i] < 6 );
-      //     dataset[i] = dataset[i] + 1;
-      // }
-      // console.log(dataset);
+      dataset = [1,2,3,"four","5",6,7];
+      console.log(dataset);
+      for ( let i = 0; i < dataset.length;  i++ ) {
+          // Notice where and when coercion is happening here
+          console.log( dataset[i], dataset[i] < 6 );
+          dataset[i] = dataset[i] + 1;
+      }
+      console.log(dataset); // What stuck around?
       
     
 
@@ -85,73 +86,74 @@
       //  (only use VAR if you really mean it!)
       var fruit = "tomato";
       var veg = "bok choy";
-      // if (fruit === "tomato") {
-      //   let fruit = "apple";
-      //   var veg = "cucumber";
-      //   console.log("in if");
-      //   console.log(fruit);
-      //   console.log(veg);
-      // }
-      // console.log("out if");
-      // console.log(fruit);
-      // console.log(veg);
+      if (fruit === "tomato") {
+        let fruit = "apple";
+        var veg = "cucumber";
+        console.log("in if");
+        console.log(fruit);
+        console.log(veg);
+      }
+      console.log("out if");
+      console.log(fruit); // not changed
+      console.log(veg); // changed due to global scope
       
       let test = "script blocks. how do they work?";
-      
-      // Let's look at scopes in script tags
+      // see print statement in separate block
+      // compare let with var here
       
       
       // Let's look at hoisting of variables
-      // console.log(x);
-      // var x = 5;
-      // console.log(x);
-      
-      
+      console.log(x);
+      var x = 5;
+      console.log(x);
+      // Try commenting out the var line. You get an error. Why?
       
       // * Let's talk JSON
       // JSON is used as a way to convey complex data over the web (e.g. getting data from an API elsewhere)
       // Key benefit over something like serialization is that it is standardized and very human-readable
 
-      // let obj = [{"name":"DDWA", "number":3300 },{"name": "Java", "number": 2110},{"name": "Python", "number": 1110}];
-      // console.log(obj);
-      // let jsonObj = JSON.stringify(obj);
-      // console.log(jsonObj);
-      // console.log(typeof(jsonObj));
-      // console.log( JSON.parse(jsonObj) );
+      let obj = [{"name":"DDWA", "number":3300 },{"name": "Java", "number": 2110},{"name": "Python", "number": 1110}];
+      console.log(obj);
+      let jsonObj = JSON.stringify(obj);
+      console.log(jsonObj);
+      console.log(typeof(jsonObj));
+      console.log( JSON.parse(jsonObj) );
 
 
-      // // This one won't parse because it breaks JSON specifications
-      // let badStr = '{"list": ["commas,", "single_quo\'tes", "double_quo\\"tes", "@sÃ§i|"], "nestedObject": {"null": null, "defined": 3.1415926535}, "bool": true}'
-      // console.log( JSON.parse(badStr) );
-      // 
-      // // Here is the fixed version, note escaped quotes, eliminated undefined, and no reserved numbers
-      // // The \' is present because I used '' to create the string and need to escape quotes within it
-      // // The \\" is present to escape the backslash so that the JSON string has \" in it, which is a required by the spec
-      // let goodStr;
+      // This one won't parse because it breaks JSON specifications
+      let badStr = '{"list": ["commas,", "single_quo\'tes", "double_quo"tes", "@sÃ§i|"], "nestedObject": {"undefined": undefined, "defined": 3.1415926535}, "Infinity": Infinity, "NaN": NaN, "bool": true}'
+      //console.log(JSON.parse(badStr));
+      // Here is the fixed version, note escaped quotes, eliminated undefined, and no reserved numbers
+      // The \' is present because I used '' to create the string and need to escape quotes within it
+      // The \\" is present to escape the backslash so that the JSON string has \" in it, which is a required by the spec
+      let goodStr = '{"list": ["commas,", "single_quo\'tes", "double_quo\\"tes", "@sçi|"], "nestedObject": {"undefined": null, "defined": 3.1415926535}, "bool": true}'
+      console.log(goodStr);
+      console.log(JSON.parse(goodStr));
       
-      
+      // Hoisted!
       console.log( favoriteColor() );
       
       // Done incorrectly, the JSON parser can make you think you've fixed errors
-      // //var fib = '[1; 2; 3; 5; 7; 12]';
-      // //jsonObj = JSON.stringify(fib);
-      // var fib = JSON.stringify("[1; 2; 3; 5; 7; 12]");
-      // console.log( JSON.parse(fib) );
+      //var fib = '[1; 2; 3; 5; 7; 12]';
+      //jsonObj = JSON.stringify(fib);
+      var fib = JSON.stringify("[1; 2; 3; 5; 7; 12]");
+      console.log( JSON.parse(fib) );
+      
 
       // * Functions and loops in c/java style and functional style.
       //   (to learn more about functions, check out http://ejohn.org/apps/learn/)
 
-      // // The more familiar format specifies a name for the function.
+      // The more familiar format specifies a name for the function.
       var color = "brown";
       function favoriteColor() {
           return "taupe";
       }
-      // console.log( favoriteColor() );
-      // console.log( typeof(favoriteColor) );
-      // 
-      // // We can also declare an "anonymous" function and then give it a name.
+      console.log( favoriteColor() );
+      console.log( typeof(favoriteColor) );
+      
+      // We can also declare an "anonymous" function and then give it a name.
       var favoriteNumber = function() { return 9; }
-      // console.log( favoriteNumber() );
+      console.log( favoriteNumber() );
       
 
       // We can pass a function as an argument. Note the difference between
@@ -159,7 +161,7 @@
       function display( func ) {
         console.log( func() );
       }
-      // display(favoriteColor);
+      display(favoriteColor);
 
 
       // We can return functions from functions. Functions remember the variables
@@ -175,19 +177,33 @@
       // ** We'll learn a more efficient way to declare functions in a couple of weeks
 
 
+      
       // BONUS - If we have time
       // * Modify the text and attributes of the text tag.
-      
-      
+      let div = document.getElementById("d1");
+      div.innerText = "Goodbye!";
+      div.style.color = "green";
+
+      let textEntry = document.getElementById("entry");
+      div.innerText = textEntry.value;
 
 
       // * Modify attributes and styles of an SVG shape.
-      
-      
+      let rect1 = document.getElementById("rect1");
+      rect1.style.fill = "#a02";
+      rect1.style.strokeWidth = 7;
+      rect1.style.stroke = favoriteColor();
 
 
       // * Set an event listener that connects the slider tool with the SVG rects.
-      
+      let slider = document.getElementById("slider");
+      slider.oninput = function() { // addEventListener('input', function)
+        // Unlike the div, we have to use a function to modify properties of SVG elements.
+        // This is one of the complexities that d3 will smooth out with a more consistent API.
+        rect1.setAttribute("height", slider.value);
+        document.getElementById("rect2").setAttribute("height", slider.value / 2.0);
+      };
+
       
 
       
