@@ -67,10 +67,37 @@
   
   // 1. How can we select elements? What is the difference between select() and selectAll()?
 
+  let d2 = document.getElementById("d2")
+  console.log(d2)
+  
+  let d2div = d3.select("#d2")
+  console.log(d2div)
 
+  d2div.text("hellooo")
+  d2div.style("color","pink")
 
+  let div3 = d3.selectAll(".hellodiv")
+  div3.style("font-family","Wingdings")
+        .style("background-color","cyan")
   // 2. How can we create new elements, and set their attributes and styles?
 
+  let svg = d3.select("svg")
+  svg.append("circle")
+      .attr("r",10)
+      .attr("cx",100)
+      .attr("cy",100)
+      .attr("fill","red")
+      .on("click",function(){
+        console.log("Yoyo");
+        for (let i=0; i<30; i++){
+    svg.append("circle")
+      .attr("r",10)
+      .attr("cx",randomPixel)
+      .attr("cy",randomPixel)
+      .attr("fill","blue")
+
+  }
+        })
 
 
   // 3. How do we create lots of elements (but not using data just yet)?
@@ -78,13 +105,46 @@
     return Math.random() * svg.attr("height");
   }
 
+  // C style loop
+  for (let i=0; i<10; i++){
+    svg.append("circle")
+      .attr("r",10)
+      .attr("cx",randomPixel)
+      .attr("cy",randomPixel)
+      .attr("fill","blue")
 
+  }
 
+  // JS loop
+  let colors=["teal","silver","yellow","purple","brown"];
+  colors.forEach((d,i)=>{
+
+  // colors.forEach(function(d,i){
+      console.log(d,i)
+      // d: element in the array
+      // i: position
+
+      let rad = 4+ Math.random()*20;
+      svg.append("circle")
+      .attr("r",rad)
+      .attr("cx",randomPixel)
+      .attr("cy",randomPixel)
+      .attr("fill",d)
+
+  });
   // 4. How do we update the attributes of existing elements?
 
+  d3.selectAll("circle")
+    .transition().delay(1000).duration(500)
+    .style("fill","orange")
 
+  d3.selectAll("circle")
+    .transition().delay(1500).duration(500)
+    .attr("r",20);
 
-
+  d3.selectAll("circle")
+    .transition().delay(1800).duration(500)
+    .attr("cx",randomPixel);
   </script>
 
 
