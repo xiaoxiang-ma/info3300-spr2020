@@ -64,8 +64,14 @@
   <!--- Code for today's class --->
   <script id="notes">
   
+  // console.log(d3);
   
   // 1. How can we select elements? What is the difference between select() and selectAll()?
+  let d2 = document.getElementById("d2");
+  console.log(d2);
+  
+  let d2div = d3.select("#d2");
+  console.log(d2div);
 
   let d2 = document.getElementById("d2")
   console.log(d2)
@@ -80,6 +86,7 @@
   div3.style("font-family","Wingdings")
         .style("background-color","cyan")
   // 2. How can we create new elements, and set their attributes and styles?
+  let svg = d3.select("svg");
 
   let svg = d3.select("svg")
   svg.append("circle")
