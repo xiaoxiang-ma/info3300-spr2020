@@ -64,25 +64,85 @@
   <!--- Code for today's class --->
   <script id="notes">
   
+  // console.log(d3);
   
   // 1. How can we select elements? What is the difference between select() and selectAll()?
+  let d2 = document.getElementById("d2");
+  console.log(d2);
+  
+  let d2div = d3.select("#d2");
+  console.log(d2div);
 
+  d2div.text("Hello, INFO3300");
+  d2div.style("color", "pink");
+  console.log(d2div.style("color"));
+  
+  d2div.text("Hello, CS3300")
+       .style("color", "blue")
+       .style("background-color","aquamarine")
+       .style("font-weight", "bold");
+       
+  let divs = d3.selectAll(".hellodiv");
+  //divs.style("font-family","Wingdings");
+  d3.selectAll(".hellodiv").style("color", "yellow")
+                           .style("background-color","green");
 
 
   // 2. How can we create new elements, and set their attributes and styles?
+  let svg = d3.select("svg");
 
-
+  // svg.append("circle")
+  //   .attr("r", 10)
+  //   .attr("cx", 100)
+  //   .attr("cy", 100)
+  //   .attr("fill","red")
+  //   .on("click", function() { console.log("Hello"); } );
 
   // 3. How do we create lots of elements (but not using data just yet)?
   function randomPixel() {
     return Math.random() * svg.attr("height");
   }
-
+  
+  // C style loop
+  for (let i = 0; i < 10; i++) {
+    svg.append("circle")
+      .attr("r", 10)
+      .attr("cx", randomPixel() )
+      .attr("cy", randomPixel() )
+      .attr("fill","red");
+  }
+  
+  // JS style loop
+  let colors = ["teal","silver","green","purple","brown"];
+  colors.forEach( (d, i) => {
+    // d = the element in the array
+    // i = the position in the array
+    console.log(d,i);
+    
+    let rad = 4 + Math.random() * 20;
+    
+    svg.append("circle")
+      .attr("r", rad)
+      .attr("cx", randomPixel() )
+      .attr("cy", randomPixel() )
+      .attr("fill", d);
+    
+    
+  } );
 
 
   // 4. How do we update the attributes of existing elements?
-
-
+  d3.selectAll("circle")
+    .transition().delay(1000).duration(500)
+    .style("fill","orange");
+    
+  d3.selectAll("circle")
+    .transition().delay(1600).duration(500)
+    .attr("r",20);
+    
+  d3.selectAll("circle")
+    .transition().delay(2100).duration(500)
+    .attr("cx", randomPixel );
 
 
   </script>
