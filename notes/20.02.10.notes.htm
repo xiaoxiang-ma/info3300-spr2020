@@ -63,72 +63,191 @@
 
   // ---- 1. Let's make a doubled histogram of all passengers on the Titanic
   
-  //   LIVES SIDE
-  // What do we need to have in order to be able to draw properly?
+  // 1. Let's make a doubled histogram of all passengers on the Titanic
 
+  // First two linear scales, age -> x-pixels, lived -> y-pixels
 
+  // Think of "domain" and "range" as "input" and "output" or "data" to "pixels",
+  //  NOT as x and y.
 
+  // The domain takes a single argument, an array (NOT two arguments),
+  // which represents two inputs. We often choose these to be
+  // reasonable extremes, but the function will still work for
+  // values outside these values.
+  // The range works the same way: we give it a two-element array.
+  // Behind the scenes, scaleLinear first does (value - domainMin) / (domainMax - domainMin)
+  //  then it multiplies the result following this formula: (result * (rangeMax - rangeMin)) + rangeMin
 
-  // Now let's draw some lines (easier than rects for now)
+  let svg = d3.select("svg#all");
+  console.log(svg);
+  let width = svg.attr("width");
+  let height = svg.attr("height");
 
-
-
-
-  //   DEATHS SIDE
-  // What do we need in order to be able to draw?
   
-  
+  // Figure out maximum here, then paste above and alter to max
+  let maxMortality = d3.max(passengers, function(d) { return Math.max(d['lived'],d['died']); });
+  // d3.max takes an array and a "getter" function. It calls the function on each element in the array and expects it to return the item for d3.max to investigate -- in this case, for each element we return lived or died, whichever is higher. d3.max then iterates and finds the large number returned
 
-    
-  // Now let's draw some lines (shortcut instead of rects)
-  
-  
-  
+  let ageScale = d3.scaleLinear()
+    .domain([0,80]) // From our data
+    .range([10,width-10]); // We want to space things inwards a bit
+  // d3.scaleLinear() returns a FUNCTION which we then assign to ageScale (because functions are also objects in JS). This allows us to call ageScale(number)
 
-  // Spoiler: something weird is going to happen about now
+  let livedScale = d3.scaleLinear()
+    .domain([0,maxMortality]) // Start by picking arbitrary number (we later noticed this was an error and determined the maximum above)
+    .range([10,height/2]); // Let's end in the middle
+     // inverting range will alleviate the strange math in .attr(y2)
 
+  // Now let's draw some lines!
+  passengers.forEach(function(d, i) {
+    svg.append("line")
+      .attr("x1",ageScale( d['age'] ))
+      .attr("x2",ageScale( d['age'] ))
+      .attr("y1",height/2)
+      .attr("y2",height/2 - livedScale( d['lived'] )) 
+        // Note, because our bars rise upwards from the bottom line, we have to do some math trickery here because it doesn't match SVG coord system
+        //  The alternative I demonstrated in class was to adjust livedScale so that the range is in reverse (i.e. running from height/2 to 10, or .range([height/2,10]) )
+      .style("stroke", "#5555F0")
+      .style("stroke-width", 10);
+  });
+
+  // What about deaths?
+  //  (set domain at 200, died will overflow -- we need to find max!)
+
+  let diedScale = d3.scaleLinear()
+    .domain([0,maxMortality]) // Start by picking arbitrary number (we will come back to this)
+    .range([0,height/2-10]); // Let's start in the middle
+
+  passengers.forEach(function(d, i) {
+    svg.append("line")
+      .attr("x1",ageScale( d['age'] ))
+      .attr("x2",ageScale( d['age'] ))
+      .attr("y1",height/2)
+      .attr("y2",height/2 + diedScale( d['died'] ))
+      // Math works differently here because our bars are "hanging" from height/2 which matches the coordinates of the SVG canvas
+      .style("stroke", "#F05555")
+      .style("stroke-width", 10);
+  });
+
+  
+  // --------- BONUS CONTENT ----------
 
 
   // How about some labels? We can reuse our existing scales
-  
-  
-  
-
-  // Position them a bit better?
+  passengers.forEach(function(d,i) {
     
-    
+    // svg.append("text")
+    //  .attr("text-anchor","middle")
+    //  .attr("font-size","15px")
+    //  .attr("x",ageScale(d['age'])).attr('y',10)
+    //  .text(d['age']);
+
+    // How can we get them to appear right above bars? 
+    // USE THE SCALES!
+    svg.append("text")
+      .attr("text-anchor","middle")
+      .attr("font-size","15px")
+      .attr("x",ageScale(d['age'])).attr('y',height/2 - livedScale( d['lived'] ) - 10)
+      .text(d['age']);
+  });
 
 
-  // ----- 2. Now let's break down by gender
 
-  //  MALE chart
-  
-  
-  
+  // 2. Let's break the data down by gender now!
 
-  // svg.append("text").text("Male Passengers").attr("x",10).attr("y",20).style("font-size","15px");
+  // TRY INCLUDING LET -- IT WILL CAUSE EXCEPTION BECAUSE WE'VE ALREADY DECLARED THE VARIABLE
+  svg = d3.select("svg#male");
+  console.log(svg)
+  width = svg.attr("width");
+  height = svg.attr("height");
 
-  // Make some scales
+  svg.append("text").text("Male Passengers").attr("x",10).attr("y",20).style("font-size","15px");
 
-  
-  
-  // Draw chart
-  
-  
-  
-  //  FEMALE chart
-  
-  
-  // svg.append("text").text("Female Passengers").attr("x",10).attr("y",20).style("font-size","15px");
-  
-  // Make some scales
 
-  
-  
-  // Draw chart
-  
-  
+  // PASTED FROM ABOVE
+  // WARNING: We don't want to recompute maxMortality for either of these two datasets
+  //   Because we have a "total" plot at the top, we want to make sure comparisons across the bars are fair
+  //   So we use maxMortality from that and comment it out in the gender plots
+  // maxMortality = d3.max(passengersMale, function(d) { return Math.max(d['lived'],d['died']); });
+  ageScale = d3.scaleLinear()
+    .domain([0,80])
+    .range([10,width-10]);
+  livedScale = d3.scaleLinear()
+    .domain([0,maxMortality])
+    .range([10,height/2]);
+  diedScale = d3.scaleLinear()
+    .domain([0,maxMortality]) 
+    .range([0,height/2-10]);
 
+  // Why iterate 3 separate times? Do it all in one forEach
+  passengersMale.forEach(function(d, i) {
+    svg.append("line")
+      .attr("x1",ageScale( d['age'] ))
+      .attr("x2",ageScale( d['age'] ))
+      .attr("y1",height/2)
+      .attr("y2",height/2 - livedScale( d['lived'] ))
+      .style("stroke", "#5555F0")
+      .style("stroke-width", 10);
+    svg.append("line")
+      .attr("x1",ageScale( d['age'] ))
+      .attr("x2",ageScale( d['age'] ))
+      .attr("y1",height/2)
+      .attr("y2",height/2 + diedScale( d['died'] ))
+      .style("stroke", "#F05555")
+      .style("stroke-width", 10);
+    svg.append("text")
+      .attr("text-anchor","middle")
+      .attr("font-size","10px")
+      .attr("x",ageScale(d['age'])).attr('y',height/2 - livedScale( d['lived'] ) - 10)
+      .text(d['age']);
+  });
+
+  // Now do female side of dataset
+  svg = d3.select("svg#female");
+  console.log(svg)
+  width = svg.attr("width");
+  height = svg.attr("height");
+
+  svg.append("text").text("Female Passengers").attr("x",10).attr("y",20).style("font-size","15px");
+  // maxMortality = d3.max(passengersFemale, function(d) { return Math.max(d['lived'],d['died']); });
+  ageScale = d3.scaleLinear()
+    .domain([0,80]) // From our data
+    .range([10,width-10]); // We want to space things inwards a bit
+  livedScale = d3.scaleLinear()
+    .domain([0,maxMortality]) // Start by picking arbitrary number (set at 200 for errors)
+    .range([10,height/2]); // Let's end in the middle
+  diedScale = d3.scaleLinear()
+    .domain([0,maxMortality]) // Start by picking arbitrary number (we will come back to this)
+    .range([0,height/2-10]); // Let's start in the middle
+
+  // Why iterate 3 separate times?
+  passengersFemale.forEach(function(d, i) {
+
+    // Let's also create some fun color ranges
+    //  More on this next week
+    let colorLived = d3.scaleLinear().domain([0,100]).range(['darkblue','turquoise']).interpolate(d3.interpolateHcl);
+    let colorDied = d3.scaleLinear().domain([0,50]).range(['darkred','pink']).interpolate(d3.interpolateHcl);
+
+    svg.append("line")
+      .attr("x1",ageScale( d['age'] ))
+      .attr("x2",ageScale( d['age'] ))
+      .attr("y1",height/2)
+      .attr("y2",height/2 - livedScale( d['lived'] ))
+      .style("stroke", colorLived( d['lived'] ))
+      .style("stroke-width", 10);
+    svg.append("line")
+      .attr("x1",ageScale( d['age'] ))
+      .attr("x2",ageScale( d['age'] ))
+      .attr("y1",height/2)
+      .attr("y2",height/2 + diedScale( d['died'] ))
+      .style("stroke", colorDied( d['died'] ))
+      .style("stroke-width", 10);
+    svg.append("text")
+      .attr("text-anchor","middle")
+      .attr("font-size","10px")
+      .attr("x",ageScale(d['age'])).attr('y',height/2 - livedScale( d['lived'] ) - 10)
+      .text(d['age']);
+  });
 
   </script>
 
