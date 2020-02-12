@@ -66,22 +66,57 @@
   //   LIVES SIDE
   // What do we need to have in order to be able to draw properly?
 
+  let svg = d3.select("svg#all");
+  let width = svg.attr("width");
+  let height = svg.attr("height");
+  console.log(svg,width,height);
 
+  let maxLivedorDied = d3.max(passengers,(d)=>{return d['died']});
+  console.log(maxLivedorDied)
+  let ageScale = d3.scaleLinear()
+                    .domain([0,80]) //Data space
+                    .range([10,width-10]); // Pixel
+  console.log(ageScale(40));
 
+  let livedScale = d3.scaleLinear()
+                    .domain([0,160]) //Data space
+                    .range([height/2,10]); // Pixel
+  console.log(livedScale(80));
 
   // Now let's draw some lines (easier than rects for now)
 
-
+  passengers.forEach((d,i)=>{
+    // console.log(d)
+      svg.append("line")
+          .attr("x1",ageScale(d['age']))
+          .attr("x2",ageScale(d['age']))
+          .attr("y1",height/2)
+          .attr("y2",livedScale(d['lived']))
+          .attr("stroke","#5555F0")
+          .attr("stroke-width",10)
+  });
 
 
   //   DEATHS SIDE
   // What do we need in order to be able to draw?
   
-  
+  let diedScale = d3.scaleLinear()
+        .domain([0,160])
+        .range([ height/2,height-10]);
 
     
   // Now let's draw some lines (shortcut instead of rects)
-  
+
+  passengers.forEach((d,i)=>{
+    // console.log(d)
+      svg.append("line")
+          .attr("x1",ageScale(d['age']))
+          .attr("x2",ageScale(d['age']))
+          .attr("y1",height/2)
+          .attr("y2",diedScale(d['died']))
+          .attr("stroke","#F05555")
+          .attr("stroke-width",10)
+  });
   
   
 
