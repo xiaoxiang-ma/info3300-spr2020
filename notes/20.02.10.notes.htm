@@ -94,10 +94,7 @@
   // Behind the scenes, scaleLinear first does (value - domainMin) / (domainMax - domainMin)
   //  then it multiplies the result following this formula: (result * (rangeMax - rangeMin)) + rangeMin
 
-  let svg = d3.select("svg#all");
-  console.log(svg);
-  let width = svg.attr("width");
-  let height = svg.attr("height");
+
 
   passengers.forEach((d,i)=>{
     // console.log(d)
@@ -173,7 +170,7 @@
   // WARNING: We don't want to recompute maxMortality for either of these two datasets
   //   Because we have a "total" plot at the top, we want to make sure comparisons across the bars are fair
   //   So we use maxMortality from that and comment it out in the gender plots
-  // maxMortality = d3.max(passengersMale, function(d) { return Math.max(d['lived'],d['died']); });
+  maxMortality = d3.max(passengersMale, function(d) { return Math.max(d['lived'],d['died']); });
   ageScale = d3.scaleLinear()
     .domain([0,80])
     .range([10,width-10]);
