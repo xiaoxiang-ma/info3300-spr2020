@@ -95,7 +95,7 @@
 
   let livedScale = d3.scaleLinear()
     .domain([0,maxMortality]) // Start by picking arbitrary number (we later noticed this was an error and determined the maximum above)
-    .range([10,height/2]); // Let's end in the middle
+    .range([0,height/2]); // Let's end in the middle
      // inverting range will alleviate the strange math in .attr(y2)
 
   // Now let's draw some lines!
@@ -174,7 +174,7 @@
     .range([10,width-10]);
   livedScale = d3.scaleLinear()
     .domain([0,maxMortality])
-    .range([10,height/2]);
+    .range([0,height/2]);
   diedScale = d3.scaleLinear()
     .domain([0,maxMortality]) 
     .range([0,height/2-10]);
@@ -215,7 +215,7 @@
     .range([10,width-10]); // We want to space things inwards a bit
   livedScale = d3.scaleLinear()
     .domain([0,maxMortality]) // Start by picking arbitrary number (set at 200 for errors)
-    .range([10,height/2]); // Let's end in the middle
+    .range([0,height/2]); // Let's end in the middle
   diedScale = d3.scaleLinear()
     .domain([0,maxMortality]) // Start by picking arbitrary number (we will come back to this)
     .range([0,height/2-10]); // Let's start in the middle
