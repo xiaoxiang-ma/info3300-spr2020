@@ -1,0 +1,70 @@
+<html><head>
+<title>INFO 3300 - February 14</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+  
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  
+
+</head>
+<body>
+  <div class="container larger">
+  <h3>Prompt for February 14</h3>
+  <p>
+    This is just a quick review of JS promises and asynchrony. Check out your console and compare to the code!
+  </p>
+
+  <h5>HTML for today:</h5>
+
+
+  <!-- This block will be automatically filled with syntax-highlighted code from the script below -->
+  <h5>Code for today:</h5>
+  <pre>
+    <code id="display1" class="hljs javascript">
+    </code>
+  </pre>
+
+  <!--- Code for today's class --->
+  <script id="notes1">
+
+  console.log("1. start of script tag");
+  
+  d3.csv("../datasets/gapminder.csv").then( (data) => {
+    
+    console.log("2. inside of the promise");
+    console.log("3. printing 'data'");
+    console.log(data);
+    
+  },
+  (error) => { 
+    console.log("E. an error happened"); 
+    console.log(error) 
+  } );
+  
+  console.log("4. after d3.csv");
+  console.log("5. printing 'data' outside of promise");
+  console.log(data);
+
+  </script>
+
+
+
+
+  <!--- calls the highlight library to fill the <pre> tag with code --->
+  <script>
+  document.getElementById("display1").innerText = document.getElementById("notes1").innerText;
+  hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+  </div>
+</body>
+</html>
