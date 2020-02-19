@@ -167,6 +167,18 @@
     .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
     .call(bottomGridlines);
     
+  // DON'T FORGET:
+  // If you're going to use d3.axis to make gridlines using the negative tickSize trick...
+  // You need to use CSS styles to lighten up the gridlines and HIDE the .domain line
+  // e.g. (assuming you give the <g> a gridlines class like the example does)
+  
+  // .gridlines line {
+  //   stroke: #bbb;
+  // }
+  //
+  // .gridlines .domain {
+  //   stroke: none;
+  // }
   
   
   // 3. Start plotting circles and see what happens
