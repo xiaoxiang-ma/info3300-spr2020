@@ -1,0 +1,370 @@
+<html><head>
+<title>INFO 3300 - February 19</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <style>
+  
+    .legend span {
+      margin-right: 10px;
+    }
+
+    .gridlines line {
+      stroke: #bbb;
+    }
+
+    .gridlines .domain {
+      stroke: none;
+    }
+
+  </style>
+
+</head>
+<body>
+  <div class="container larger">
+  <h3>Prompt for February 19</h3>
+  <p>
+    Project 1 has started up! Make sure that you submit Milestone 2. Also, if your mentor does not have your Github repo and all TAs cannot access it, then will be unable to grade your project.
+  </p>
+  <p>
+    Check out <a href="https://mimno.github.io/showcase/#p1">Professor Mimno's project showcase</a> from a past iteration of INFO3300. There are some interesting projects there that might inspire you.
+  </p>
+  <p>
+    Today we're looking at data joins. There are now two different ways to do a data join in d3.<br/>
+     <a href="https://observablehq.com/@d3/selection-join">This page</a> demonstrates the "new" way to do joins.<br/>
+     While <a href="https://bost.ocks.org/mike/join/">another page</a> demonstrates the "old" style of join.
+  <p>
+    If you're still confused about why we used translate in the last class, Mike Bostock has a <a href="https://bl.ocks.org/mbostock/3019563">handy page discussing chart margins</a>.
+  </p>
+
+  <h5>HTML for today:</h5>
+  
+  <p style="margin-top: 50px;">Data join demo:</p>
+  <svg id="joinDemo" height="100" width="500" style="border: 1px solid black;" >
+    
+    
+  </svg>
+  
+  <pre id="textSimulation">[ - - - - - - - - - ]</pre>
+
+  <p style="margin-top: 50px;">Scatterplot:</p>
+  
+  <svg id="scatterplot" height="400" width="600" style="margin-top:50px" >
+    <text id="label" x="590" y="5"  text-anchor="end" alignment-baseline="hanging"></text>
+  </svg>
+  
+  <div id="scatterLegend" class="legend"> </div>
+
+
+
+  <!-- This block will be automatically filled with syntax-highlighted code from the script below -->
+  <h5>Code for today, pt1:</h5>
+  <pre>
+    <code id="display1" class="hljs javascript">
+    </code>
+  </pre>
+  <h5>Code for today, pt2:</h5>
+  <pre>
+    <code id="display2" class="hljs javascript">
+    </code>
+  </pre>
+
+  <!--- Code for today's class --->
+  <script id="notes1">
+
+
+  // 0. Let's make a fancy scatterplot
+  const demo = d3.select("svg#joinDemo");
+  
+  // (maybe some colors here later?)
+  
+  
+  function updateChart(circles) {
+    
+    console.log(circles);
+    
+    // 1. Old way
+    
+       
+    // 2. New way
+    
+       
+    // 3. Shorthand version
+    
+                       
+    
+    
+  }
+  
+  
+
+  </script>
+  
+  
+  
+  
+  <script id="notes2">
+  
+  // ------ We're going to edit the code from Monday to use a data join ------
+  //   Scroll down to the forEach!
+  
+  const svg = d3.select("svg#scatterplot");
+  const width = svg.attr("width");
+  const height = svg.attr("height");
+  const margin = {top: 10, right: 10, bottom: 50, left: 50};
+  const chartWidth = width - margin.left - margin.right;
+  const chartHeight = height - margin.top - margin.bottom;
+
+  let annotations = svg.append("g").attr("id","annotations");
+  let chartArea = svg.append("g").attr("id","points")
+                  .attr("transform","translate("+margin.left+","+margin.top+")");
+
+  // Import some CSV data
+  d3.csv("../datasets/blockbusters.csv", d3.autoType)
+    .then( (data) => {
+  
+  // Check for data issues
+  data.forEach( d => {
+    d['worldwide_gross'] =  Number(d['worldwide_gross'].replace(/,/g,"").replace(/\$/g,""));
+  });
+  
+  // Scales
+  const yearExtent = d3.extent(data, d => d['year']);
+  const yearScale = d3.scaleLinear().domain(yearExtent).range([0, chartWidth]);
+  const grossExtent = d3.extent(data, d => d['worldwide_gross']);
+  const grossScale = d3.scaleLog().domain(grossExtent).range([chartHeight, 0]);
+  const imdbExtent = d3.extent(data, d => d['imdb_rating']);
+  const imdbScale = d3.scaleLinear().domain(imdbExtent).range([3,8]);
+  const genreScale = d3.scaleOrdinal(d3.schemeCategory10);
+  
+  // Y axis
+  let leftAxis = d3.axisLeft(grossScale)
+                   .tickFormat(d3.format("$.0s"))
+  let leftGridlines = d3.axisLeft(grossScale)
+                        .tickSize(-chartWidth-10)
+                        .tickFormat("")
+  annotations.append("g")
+    .attr("class", "y axis")
+    .attr("transform","translate("+(margin.left-10)+","+margin.top+")")
+    .call(leftAxis)
+  annotations.append("g")
+    .attr("class", "y gridlines")
+    .attr("transform","translate("+(margin.left-10)+","+margin.top+")")
+    .call(leftGridlines);
+  
+  // X axis
+  let bottomAxis = d3.axisBottom(yearScale)
+                     .tickFormat(d3.format("~f"));
+  let bottomGridlines = d3.axisBottom(yearScale)
+                          .tickSize(-chartHeight-10)
+                          .tickFormat("")
+  annotations.append("g")
+    .attr("class", "x axis")
+    .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
+    .call(bottomAxis);
+  annotations.append("g")
+    .attr("class", "x gridlines")
+    .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
+    .call(bottomGridlines);
+  
+  
+  
+  // 1. Update this for the data join!
+  
+  data.forEach( (d, i) => {
+  
+    let circle = chartArea.append("circle")
+        .attr("cx", yearScale(d['year']))
+        .attr("cy", grossScale(d['worldwide_gross']+1))
+        .attr("r", imdbScale(d['imdb_rating']))
+        .style("fill", genreScale(d['Main_Genre']))
+        .attr("label", d["title"])
+        .attr("genre", d["Main_Genre"])
+        .attr("opacity", 0.8);
+  
+    // Add some mouseovers
+    // mouseover
+    circle.on("mouseover", function() {
+  
+      d3.select(this)
+        .transition().duration(200)
+        .attr("stroke-width",4)
+        .attr("stroke","black")
+        .style("fill",lighten( genreScale(d['Main_Genre']) ));
+  
+      d3.select("#label")
+        .text(d['title']);
+    });
+  
+    // clear mouseover
+    circle.on("mouseout", function() {
+      d3.select(this)
+        .transition().duration(200)
+        .attr("stroke-width",1)
+        .attr("stroke","none")
+        .style("fill", genreScale(d['Main_Genre']) );
+  
+      d3.select("#label")
+        .text("");
+    });
+  
+  
+  });
+  //done with forEach
+
+
+  
+  // How can we make a simple legend?
+  console.log(genreScale.domain())
+  genreScale.domain().forEach(function(d,i) {
+    d3.select("#scatterLegend")
+      .append("span")
+      .text(d)
+      .style("color",genreScale(d))
+      .on("click", function() {
+        
+        // 2. Update this for data join
+        
+        d3.selectAll("#scatterplot circle").each( function() {
+        
+          let element = d3.select(this);
+          if (element.attr("genre") === d) {
+            // First try opacity, mouseover errors
+            element.attr("opacity",0.8);
+            element.attr("visibility", "");
+          }
+          else {
+            element.attr("opacity",0);
+            element.attr("visibility", "hidden");
+          }
+        
+        })
+        
+        
+
+      })
+  });
+});
+  
+  
+  
+  
+  
+  
+  </script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // ----- Helper functions for today's lesson -----
+  <script>
+  
+  // Configure the simulation here
+  const numCircles = 7;
+  const emptySpots = 4;
+  const viewport = 9;  // for wraparound use numCircles + emptySpots
+  const xSpacing = 50;
+  const yPos = 50;
+  const maxLen = (numCircles + emptySpots) * xSpacing;
+  
+  // Simulation lives here
+  var circles = [];
+  
+  // Steps the simulation one step forward, adding and removing elements as necessary
+  var tick = function() {
+      
+    for (let i=0; i<circles.length; i++) {
+      // Update circle age
+      circles[i]['age'] = circles[i]['age'] + 1;
+    }
+    // If we have numCircles, remove the oldest one
+    if (circles.length >= numCircles) {
+      circles.shift();
+    }
+    // Always add a circle positioned after the most recent one
+    let element;
+    if (circles.length === 0) {
+      element = { x: xSpacing, y: yPos, age: 1 };
+    }
+    else {
+      let recent = circles[circles.length-1];
+      element = { x: xSpacing + (recent.x % maxLen), y: yPos, age: 1 };
+    }
+    circles.push(element);
+    
+    // Update for viewport
+    let view = [];
+    for (let i=0; i<circles.length; i++) {
+      if ( Math.floor(circles[i]['x'] / xSpacing) <= viewport ) {
+        view.push(circles[i]);
+      }
+     }
+    
+    updateChart(view);
+    d3.select("#textSimulation").text( plaintextTicks(circles) );
+    
+  }
+  
+  // This function makes a user-friendly text version of the simulation
+  //  e.g. [ - 7 6 5 4 3 2 1 - - - ]
+  function plaintextTicks(data) {
+      let dir = [];
+      for (let i=0; i<viewport; i++) {
+          dir.push('-');
+      }
+      data.forEach( d => {
+        if ( Math.floor(d.x / xSpacing) <= viewport ) {
+          let pos = (d.x / xSpacing) - 1;
+          dir[pos] = d.age;
+        }
+      })
+      return '[ ' + dir.join(' ') + ' ]';
+  }
+  
+  
+  setInterval( tick, 800 );
+  
+  </script>
+
+  <script>
+  
+  // HELPER FUNCTION
+  //  lighten a color a little bit using d3 color functions
+  function lighten(color) {
+      
+      let hclColor = d3.hcl(color);
+      let luma = Math.min(130, hclColor.l + 30);
+      return d3.rgb( d3.hcl( hclColor.h, hclColor.c, luma ) );
+    
+  }
+
+  </script>
+
+
+
+  <!--- calls the highlight library to fill the <pre> tag with code --->
+  <script>
+  document.getElementById("display1").innerText = document.getElementById("notes1").innerText;
+  document.getElementById("display2").innerText = document.getElementById("notes2").innerText;
+  hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+  </div>
+</body>
+</html>

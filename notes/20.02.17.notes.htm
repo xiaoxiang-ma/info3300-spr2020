@@ -29,7 +29,7 @@
 </head>
 <body>
   <div class="container larger">
-  <h3>Prompt for February 17</h3>
+  <h3>Notes for February 17</h3>
   <p>
     Project 1 has started up! Make sure that you are submitting Milestone 0 and Milestone 1.
   </p>
@@ -50,6 +50,8 @@
 
   <svg id="scatterplot" height="400" width="600" style="margin-top:50px" >
     <text id="label" x="590" y="5"  text-anchor="end" alignment-baseline="hanging"></text>
+    
+    
   </svg>
   
   <div id="scatterLegend" class="legend"> </div>
@@ -95,8 +97,7 @@
     .then( (data) => {
     
   // ------- START OF PROMISE ------
-      
-      
+  
   
   // 1. Check for data issues
   // console.log(data)
@@ -105,9 +106,8 @@
   })
   // console.log(data)
 
-
-  // Here are some scales
-  // Notice the new function, d3.extent()
+  // Building the scales we need
+  // Notice the new function, d3.extent() -- it returns an array containing [min, max] to simplify things
   const yearExtent = d3.extent(data, d => d['year']);
   const yearScale = d3.scaleLinear().domain(yearExtent).range([0, chartWidth]);
   
@@ -117,11 +117,17 @@
   const imdbExtent = d3.extent(data, d => d['imdb_rating']);
   const imdbScale = d3.scaleLinear().domain(imdbExtent).range([3,8]);
 
-  const genreScale = d3.scaleOrdinal(d3.schemeCategory10)
+  // NEW - in order to color points by film genre, we need a new color scale
+  //  To do this, we use d3.scaleOrdinal. Unlike other scales, this doesn't generally need a domain or range
+  //  Instead, you give it a color scheme to use for its coloring (see d3 color docs)
+  //  It will build up its domain as you use it to color new items
+  const genreScale = d3.scaleOrdinal(d3.schemeCategory10);
   
-  // 2. Draw some axes, make them fancy
+  // 2. Draw some axes, make them fancy through using tickFormat
+  //   Look at the documentation for d3.format to see all of the different options
+  //       d3 tickformatting: https://github.com/d3/d3-format
   let leftAxis = d3.axisLeft(grossScale)
-                   .tickFormat(d3.format("$.0s"))
+                   .tickFormat(d3.format("$.0s"));  // shorter scientific notation with a dollar sign in front
   let leftGridlines = d3.axisLeft(grossScale)
                         .tickSize(-chartWidth-10)
                         .tickFormat("")
@@ -141,7 +147,7 @@
   
   // X axis
   let bottomAxis = d3.axisBottom(yearScale)
-                     .tickFormat(d3.format("~f"))
+                     .tickFormat(d3.format("~f"));  // exact value without commas
   let bottomGridlines = d3.axisBottom(yearScale)
                           .tickSize(-chartHeight-10)
                           .tickFormat("")
@@ -154,9 +160,18 @@
     .attr("transform","translate("+margin.left+","+(chartHeight+margin.top+10)+")")
     .call(bottomGridlines);
     
-  // These scales, as written in the prompt, look a bit weird
-  //  Let's use tickFormat to make better ones
-  // Here is a huge guide on d3 tickformatting: https://github.com/d3/d3-format
+  // DON'T FORGET:
+  // If you're going to use d3.axis to make gridlines using the negative tickSize trick...
+  // You need to use CSS styles to lighten up the gridlines and HIDE the .domain line
+  // e.g. (assuming you give the <g> a gridlines class like the example does)
+  
+  // .gridlines line {
+  //   stroke: #bbb;
+  // }
+  //
+  // .gridlines .domain {
+  //   stroke: none;
+  // }
   
   
   // 3. Start plotting circles and see what happens
@@ -176,6 +191,21 @@
         
 
     // 5. Add some mouseovers
+    //  Mouseover triggers when mouse enters object's region
+    //  Mouseout triggers when mouse leaves the object's region
+    //  WARNING: Avoid placing new elements on top of an object when using mouseover
+    //           This can cause the two objects to fight, creating oscillating patterns
+    circle.on("mouseover", function() {
+      
+      d3.select(this)
+        .transition().duration(200)
+        .attr("stroke","black")
+        .attr("stroke-width", 4)
+        .attr("fill", lighten( genreScale(d['Main_Genre']) )) ;
+      
+      d3.select("#label").text(d['title']);
+      
+    });
     
     circle.on("mouseover", function(){
       d3.select(this)
@@ -198,7 +228,9 @@
 
   });
   // done with forEach
-
+  
+  // Check out the results of genreScale now that we've colored a bunch of points
+  console.log(genreScale.domain())
 
   
   // 6. How can we make a simple legend?
