@@ -29,7 +29,7 @@
 </head>
 <body>
   <div class="container larger">
-  <h3>Prompt for February 19</h3>
+  <h3>Notes for February 19</h3>
   <p>
     Project 1 has started up! Make sure that you submit Milestone 2. Also, if your mentor does not have your Github repo and all TAs cannot access it, then will be unable to grade your project.
   </p>
@@ -86,19 +86,79 @@
   // (maybe some colors here later?)
   
   
+  
+  // This function is triggered every 800ms by the animation that I developed (see bottom of file)
+  // Each tick of the animation changes the "circles" array slightly
+  //  First, each circle gets 1 "age" older
+  //  If a circle is over age 7, then it dies
+  //  A new circle is always added to the right of the youngest one
+  // We want updateChart to draw a circle for each element in the "circles" array onto our SVG
+  // Done right, the circles being drawn and cleared will create the illusion of movement
+  
+  // So we have new circle elements to add, some circles to remove, and old ones to update
+  // An old forEach loop would be hard to implement here, because we'd have to wipe the SVG clear each time
+  // Instead, we use d3 data joins to simplify the process dramatically
   function updateChart(circles) {
     
     console.log(circles);
     
-    // 1. Old way
+    // // 1. Old way
+    let elements = demo.selectAll("circle")
+                       .data(circles);
+                       // .data initiates a data join
+                       // d3 will look at what the .selectAll returned (it's often empty at the start)
+                       //  and compare it to the stuff you give .data().
+                       // It tries to match up elements one-to-one with elements in the data
+                       // Once it's done the join, you get access to functions based on the results
+    
+    // Exit => remove stuff
+    //  .exit() returns a set of elements that are in the selectAll but no longer match anything in the .data()
+    //  These should be removed
+    elements.exit()
+            .remove();
+    
+    // Enter => stuff you need to make
+    //  .enter() returns a set of virtual elements that don't exist yet, but should exist because there are new things in .data()
+    //  These should be added                   
+    elements.enter()
+            .append("circle")
+            .attr("r", 20)
+            .attr("fill", "steelblue")
+          // Update
+          // Since .enter() only gave the new items, if we want to be able to style _everything_ from selectAll, we need to call .merge()
+          //  .merge() will add any new objects from elements into the set you've made with .enter()
+          // This means anything in the chain after the merge will affect all of the entities you've mapped to data elements
+            .merge(elements)
+            .attr("cx", d => d['x'] )
+            .attr("cy", d => d['y'] );
     
        
     // 2. New way
+    // demo.selectAll("circle").data(circles)
+    //     .join(  // .join() is a shortcut for handling the enter, update, and exit parts of a data join. Each is a parameter for join
+    //       enter => { // the Enter parameter should be a function -- the function gets a parameter, enter, containing the set of stuff to create
+    //         enter.append("circle")
+    //                 .attr("r", 20)
+    //                 .attr("fill", "steelblue")
+    //       },
+    //       update => update, // the Update parameter should be a function -- the function gets a parameter, update, containing the set of stuff that already exists and might need updating (but it does not include points you just created in enter)
+    //       exit => { // the Exit parameter should be a function -- the function gets a parameter, exit, containing the set of stuff to remove
+    //         exit.remove() 
+    //       }
+    //     )
+    //     // For every point that is there
+    //     .attr("cx", d => d['x'] )
+    //     .attr("cy", d => d['y'] );
     
        
     // 3. Shorthand version
-    
-                       
+    // demo.selectAll("circle").data(circles)
+    //     .join("circle") // If you give join an element name like "rect" or "circle", it uses defaults for enter, update, and exit which add one of those elements or remove them as necessary. Its guesses are usually correct. Style stuff after the join
+    //     .attr("r", 20)
+    //     .attr("fill", "steelblue")
+    //     .attr("cx", d => d['x'] )
+    //     .attr("cy", d => d['y'] );
+               
     
     
   }
@@ -274,11 +334,17 @@
   <script>
   
   // Configure the simulation here
+  // numCircles is also the age at which circles "die"
   const numCircles = 7;
+  // how many empty spots you want to have in your visuals
   const emptySpots = 4;
+  // the size of the viewport -- we can make it smaller than numCircles+emptySpots to make it look like it takes time to wrap around
+  //  setting it to numCircles+emptySpots makes things immediately wrap around the SVG
   const viewport = 9;  // for wraparound use numCircles + emptySpots
+  // space between circles
   const xSpacing = 50;
   const yPos = 50;
+  // don't modify
   const maxLen = (numCircles + emptySpots) * xSpacing;
   
   // Simulation lives here
@@ -314,13 +380,16 @@
       }
      }
     
-    updateChart(view);
+    updateChart(view); // This goes to the data join function
+    
+    // This is a helper to print out the text version for reference
     d3.select("#textSimulation").text( plaintextTicks(circles) );
     
   }
   
   // This function makes a user-friendly text version of the simulation
   //  e.g. [ - 7 6 5 4 3 2 1 - - - ]
+  // When a number is provided, that's the "age" of the circle
   function plaintextTicks(data) {
       let dir = [];
       for (let i=0; i<viewport; i++) {
@@ -335,7 +404,7 @@
       return '[ ' + dir.join(' ') + ' ]';
   }
   
-  
+  // setInterval causes a function (tick in this case) to be run every X milliseconds. It will do this forever unless you stop it
   setInterval( tick, 800 );
   
   </script>

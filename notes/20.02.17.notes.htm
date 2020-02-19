@@ -220,7 +220,8 @@
       //  I had initially typed  d3.select("this")
       //  This obviously would not work, because I was trying to select a string literal "this"
       //   instead of the special object, this, which refers to the thing I mouseovered
-      // There is an additional wrinkle if you don't include the .transition(). Experiment to find out
+      // There is an additional wrinkle if you don't include the .transition().
+      
       d3.select(this)
         .transition().duration(200)
         .attr("stroke","")
@@ -236,8 +237,38 @@
   // done with forEach
   
   // Check out the results of genreScale now that we've colored a bunch of points
-  console.log(genreScale.domain())
+  console.log(genreScale.domain());
 
+  genreScale.domain().forEach( function(d,i) {
+    
+    console.log(d);
+    d3.select("#scatterLegend")
+      .append("span")
+      .text(d)
+      .style("color", genreScale(d) )
+      .on("click", function() {
+        
+        d3.selectAll("#scatterplot circle").each( function() {
+          
+          let element = d3.select(this);
+          if (element.attr("genre") === d) {
+            //matches
+            //element.attr("opacity", 0.8);
+            element.attr("visibility", "");
+          }
+          else {
+            //not match
+            //element.attr("opacity", 0);
+            element.attr("visibility", "hidden");
+          }
+          
+        });
+        
+        
+      });
+    
+    
+  });
   
   // 6. How can we make a simple legend?
   //console.log(genreScale.domain())
