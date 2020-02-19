@@ -91,7 +91,7 @@
 
   // Import some CSV data
   //   This time we'll use the autotyper
-  d3.csv("../datasets/blockbusters.csv")
+  d3.csv("../datasets/blockbusters.csv",d3.autoType)
     .then( (data) => {
     
   // ------- START OF PROMISE ------
@@ -99,8 +99,11 @@
       
   
   // 1. Check for data issues
-  console.log(data)
-
+  // console.log(data)
+  data.forEach(d=>{
+    d['worldwide_gross'] = Number(d['worldwide_gross'].replace(/,/g, "").replace(/\$/g,""))
+  })
+  // console.log(data)
 
 
   // Here are some scales
@@ -109,16 +112,16 @@
   const yearScale = d3.scaleLinear().domain(yearExtent).range([0, chartWidth]);
   
   const grossExtent = d3.extent(data, d => d['worldwide_gross']);
-  const grossScale = d3.scaleLinear().domain(grossExtent).range([chartHeight, 0]);
+  const grossScale = d3.scaleLog().domain(grossExtent).range([chartHeight, 0]);
   
   const imdbExtent = d3.extent(data, d => d['imdb_rating']);
   const imdbScale = d3.scaleLinear().domain(imdbExtent).range([3,8]);
 
-  
+  const genreScale = d3.scaleOrdinal(d3.schemeCategory10)
   
   // 2. Draw some axes, make them fancy
   let leftAxis = d3.axisLeft(grossScale)
-                   
+                   .tickFormat(d3.format("$.0s"))
   let leftGridlines = d3.axisLeft(grossScale)
                         .tickSize(-chartWidth-10)
                         .tickFormat("")
@@ -138,7 +141,7 @@
   
   // X axis
   let bottomAxis = d3.axisBottom(yearScale)
-                     
+                     .tickFormat(d3.format("~f"))
   let bottomGridlines = d3.axisBottom(yearScale)
                           .tickSize(-chartHeight-10)
                           .tickFormat("")
@@ -164,7 +167,7 @@
         .attr("cy", grossScale(d['worldwide_gross']+1))
         .attr("r", imdbScale(d['imdb_rating']))
         .attr("opacity", 0.8)
-        .style("fill", 'steelblue')
+        .style("fill", genreScale(d['Main_Genre']))
         .attr("label", d["title"])
         .attr("genre", d["Main_Genre"]);
         
@@ -174,8 +177,23 @@
 
     // 5. Add some mouseovers
     
+    circle.on("mouseover", function(){
+      d3.select(this)
+        // .style("fill","none")
+        .style("stroke","black")
+        .style("stroke-width",4)
+        .style("fill",lighten(genreScale(d['Main_Genre'])))
+      d3.select('#label').text(d['title'])
+    })
     
-    
+    circle.on("mouseout", function(){
+      d3.select(this)
+        // .style("fill","none")
+        .style("stroke","none")
+        .style("stroke-width",1)
+        .style("fill",genreScale(d['Main_Genre']))
+      d3.select('#label').text("")
+    })
     
 
   });
