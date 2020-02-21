@@ -80,10 +80,11 @@
   <script id="notes1">
 
 
-  // 0. Let's make a fancy scatterplot
+  // 0. Let's check out d3 joins
   const demo = d3.select("svg#joinDemo");
   
   // (maybe some colors here later?)
+  
   
   
   
@@ -92,7 +93,7 @@
   //  First, each circle gets 1 "age" older
   //  If a circle is over age 7, then it dies
   //  A new circle is always added to the right of the youngest one
-  // We want updateChart to draw a circle for each element in the "circles" array onto our SVG
+  // We want updateChart to draw a SVG circle for each element in the "circles" array onto our page
   // Done right, the circles being drawn and cleared will create the illusion of movement
   
   // So we have new circle elements to add, some circles to remove, and old ones to update
@@ -100,6 +101,7 @@
   // Instead, we use d3 data joins to simplify the process dramatically
   function updateChart(circles) {
     
+    // Check out how the circles array changes over time
     console.log(circles);
     
     // // 1. Old way
