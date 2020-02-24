@@ -83,7 +83,10 @@
   // 0. Let's check out d3 joins
   const demo = d3.select("svg#joinDemo");
   
-  // (maybe some colors here later?)
+  // You can also use colors as a range in a d3 scale object!
+  // Best if you make use of d3.rgb here
+  // You also need to assign a function to blend the two colors with d3.interpolate()
+  //  d3.interpolateHcl is almost always a safe bet
   let colorScale = d3.scaleLinear().domain([1,7])
                                    .range([d3.rgb("#a008f2"), d3.rgb("#e9caf4")])
                                    .interpolate(d3.interpolateHcl);
@@ -127,14 +130,14 @@
     // elements.enter()
     //         .append("circle")
     //         .attr("r", 20)
-    //         .attr("fill", "steelblue")
     //       // Update
     //       // Since .enter() only gave the new items, if we want to be able to style _everything_ from selectAll, we need to call .merge()
     //       //  .merge() will add any new objects from elements into the set you've made with .enter()
     //       // This means anything in the chain after the merge will affect all of the entities you've mapped to data elements
     //         .merge(elements)
     //         .attr("cx", d => d['x'] )
-    //         .attr("cy", d => d['y'] );
+    //         .attr("cy", d => d['y'] )
+    //         .attr("fill", d => colorScale(d.age));
     
        
     // 2. New way
