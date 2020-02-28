@@ -27,13 +27,13 @@
   <div class="container larger">
   <h3>Prompt for February 26</h3>
   <p>
-    Project 1 is almost finished! Make sure that you submit Milestone 3 tonight. Also, if your mentor still does not have your Github repo and all TAs cannot access it, then will be unable to grade your project.
+    Project 1 is almost finished! If your mentor still does not have your Github repo and all TAs cannot access it, then will be unable to grade your project.
   </p>
   <p>
     The dataset on this page comes from an interesting <a href="https://www.kaggle.com/suryak/prediction-of-co2-concentration-levels/notebook">notebook on Kaggle</a> about atmospheric CO2 concentrations. I'm using it for demo purposes and can't speak to the veracity of the data.
   </p>
   <p>
-    Today we're looking at d3 line plots. They also use a data join, but it's a bit trickier to implement. <a href="https://github.com/d3/d3-shape">Here</a> is some documentation on d3.shape, the library used for making line charts, and <a href="https://github.com/d3/d3-time-format">here</a> is the documentation on d3.time.<br/>
+    Today we're looking at d3 line plots. They also use a data join, but it's a bit trickier to implement. <a href="https://github.com/d3/d3-shape">Here</a> is some documentation on d3.shape, the library used for making line charts, and <a href="https://github.com/d3/d3-time-format">here</a> is the documentation on d3.time. Recall what we learned at the start of class on SVG <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths">paths</a>.<br/>
   <p>
     If you're still confused about why we used translate in the last class, Mike Bostock has a <a href="https://bl.ocks.org/mbostock/3019563">handy page discussing chart margins</a>.
   </p>
@@ -132,8 +132,100 @@
   
   
   
+  // 6. Stretch goal - add a detailed mouseover
+  
+  
+  
+  // Start simple
+  
+  
+  
+  
+  
+  
+  // // More complicated
+  // let mouseGroup = chartArea.append("g")
+  // 
+  // mouseGroup.on("mouseover", function() {
+  //   let location = d3.mouse(this);
+  // 
+  // });
+  // mouseGroup.on("mousemove", function() {
+  //   let location = d3.mouse(this);
+  // 
+  // });
+  // mouseGroup.on("mouseout", function() {
+  // 
+  // });
+  
+  
+  
+  
+  
+  
+  
+  
   
   }, error => {console.log(error); } );  
+  
+  
+  
+  
+  // For copy-paste later in class:
+  // // Make an active region rectangle that's invisible to "catch" mouse events
+  // let activeRegion = mouseGroup.append("rect")
+  //   .attr("id","activeRegion")
+  //   .attr("width",chartWidth)
+  //   .attr("height",chartHeight)
+  //   .attr("fill","none")
+  //   .attr("pointer-events","all");
+  
+  
+  // // Add marker lines, circles, and label
+  // let xMarker = mouseGroup.append("line")
+  //   .attr("id","xMarker")
+  //   .attr("fill","none")
+  //   .attr("stroke","black")
+  //   .attr("stroke-width",1)
+  //   .attr("y1",0)
+  //   .attr("y2",chartHeight)
+  //   .attr("opacity",0);
+  // 
+  // let valueMarker = mouseGroup.append("circle")
+  //   .attr("id","valueMarker")
+  //   .attr("fill","none")
+  //   .attr("stroke","black")
+  //   .attr("stroke-width",2)
+  //   .attr("r",10)
+  //   .attr("opacity",0);
+  // 
+  // let label = mouseGroup.append("text")
+  //   .attr("id","label")
+  //   .attr("opacity",0);
+  
+  
+  
+  // activeRegion.on("mouseover", function() {
+  //   xMarker.attr("opacity",1);
+  //   valueMarker.attr("opacity",1);
+  //   label.attr("opacity",1); 
+  // });
+  // activeRegion.on("mouseout", function() {
+  //   xMarker.attr("opacity",0);
+  //   valueMarker.attr("opacity",0);
+  //   label.attr("opacity",0); 
+  // });
+  // activeRegion.on("mousemove", function() {
+  // 
+  //   // xMarker.attr("x1",location[0]).attr("x2",location[0]);
+  //   // valueMarker.attr("cx",location[0]).attr("cy",location[1]);
+  //   // label.attr("x",).attr("y",).text();
+  // 
+  // });
+  
+  
+  
+  
   
   </script>
   
