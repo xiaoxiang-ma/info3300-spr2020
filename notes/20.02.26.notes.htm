@@ -86,15 +86,13 @@
   const carbonExtent = d3.extent(data, d => d['Carbon Dioxide (ppm)']);
   const carbonScale = d3.scaleLinear().domain(carbonExtent).range([chartHeight, 0]);
   
-  // // 2. Second, we need to spread dates across the X axis
+  // 2. Second, we need to spread dates across the X axis
+  // Since we made JS date objects, we can use the usual D3 functions and a .scaleTime()
   const dateExtent = d3.extent(data, d => d['date']);
-  console.log(dateExtent);
-  const dateScale = d3.scaleTime()
-                      .domain(dateExtent)
-                      .range([0,chartWidth]);
+  const dateScale = d3.scaleTime().domain(dateExtent).range([0,chartWidth]);
   
   
-  // // Axes are already done for us -- check previous notes for more details
+  // Axes are already done for us -- check previous notes for more details
   // Y axis
   let leftAxis = d3.axisLeft(carbonScale)
   let leftGridlines = d3.axisLeft(carbonScale)
@@ -126,20 +124,27 @@
   
   // 3. Before we start drawing, we need a line generator
   //  this will help us to draw the path based on data, which otherwise is very complicated
+  // NOTE: The line generator does not take in any data at this stage
+  //  We're just "programming" it to know what to do when you hand it data
+  //  In other words, we're saying "when you get a data point, here's what your X value should be" using functions
   var lineGen = d3.line()
-                  .x( d => dateScale(d["date"]))
-                  .y( d => carbonScale(d['Carbon Dioxide (ppm)']))
+                  .x( d => dateScale(d['date']) )
+                  .y( d => carbonScale(d['Carbon Dioxide (ppm)']) )
                   .curve(d3.curveMonotoneX);
   
-  
   // 4. Append a <path>, bind the data, and run the generator 
+  //  The generator is "run" in the last command.
   chartArea.append("path")
-            .datum(data)
-            .attr("class","line")
-            .attr("fill","none")
-            .attr("stroke", "pink")
-            .attr("stroke-width",3)
-            .attr("d",lineGen)
+           .datum(data)
+           .attr("class", "line")
+           .attr("fill", "none")
+           .attr("stroke", "steelblue")
+           .attr("stroke-width", 3)
+           .attr("d", lineGen);
+           // .datum has given our entire dataset to the <path> element
+           // so, because lineGen is a _function_, the .attr("d", lineGen) command is really working like
+           //    a data-based .attr call, such as .attr("d", d => lineGen(d)). Because we've put the whole dataset
+           //    into the <path> element, this works out so that we're really saying lineGen(data)
   
   
   // 5. Let's add some circles too!
@@ -200,6 +205,45 @@
   });
   mouseGroup.on("mouseout", function() {
     // d3.select("circle#highlight").remove()
+  });
+  
+  
+  
+  
+  // More complicated
+  // Instead, we have to resort to a more complicated solution
+  // We paint an active region on the chart that is invisible but "catches" the mouse events for us
+  let mouseGroup = chartArea.append("g");
+  let activeRegion = mouseGroup.append("rect")
+    .attr("id","activeRegion")
+    .attr("width",chartWidth)
+    .attr("height",chartHeight)
+    .attr("fill","none")
+    .attr("pointer-events","all");
+  
+  
+  // This version is very blinky -- that's because the mouseover and mouseout "fight" with each other
+  // We need to re-order our elements a bit to make things work as expected
+  // We'll resolve this at the start of class, and then do better
+  mouseGroup.on("mouseover", function() {
+    let location = d3.mouse(this);
+    
+    mouseGroup.append("circle")
+      .attr("fill","gold")
+      .attr("r", 4)
+      .attr("id", "highlight");
+    
+  });
+  mouseGroup.on("mousemove", function() {
+    let location = d3.mouse(this);
+    console.log(location);
+    chartArea.select("circle#highlight")
+            .attr("cx",location[0])
+            .attr("cy",location[1]);
+  
+  });
+  mouseGroup.on("mouseout", function() {
+    d3.select("circle#highlight").remove();
   });
   
   
