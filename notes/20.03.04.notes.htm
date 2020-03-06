@@ -77,45 +77,85 @@
 
   // 0. Let's explore a new way to use promises for data imports that might be a bit cleaner when importing lots of files
   
-  
-  
+  // const testFunc = async function() {
+  // 
+  //   var start = Date.now();
+  //   while (Date.now() < start + 10000) {}
+  // 
+  // }
+  // testFunc();
   
   
   // 1. Our async function to build the map
-  // const requestData = async function() {
+  const requestData = async function() {
     
     // 2. Draw a map of US using topoJSON
     // 2a. Import data as synchronous call to topoJSON data file
     // Care of Mike Bostock:
     //   "../datasets/us.json"
-
+    const us = await d3.json("../datasets/us.json");
+    console.log(us);
     
     // 2b. Pick out topographic features and build d3 helpers
+    var states = topojson.feature(us, us.objects.states);
+    var statesMesh = topojson.mesh(us, us.objects.states);
+    var projection = d3.geoAlbersUsa().fitSize([mapWidth, mapHeight], states);
+    var path = d3.geoPath().projection(projection);
     
-    
+    console.log(statesMesh);
     // 2c. Draw states and outlines
-    
+    map.selectAll("path.state").data(states.features)
+       .join("path")
+       .attr("class", "state")
+       .attr("note", d => d.id)
+       .attr("d", path);
+       
+    map.append("path").datum(statesMesh)
+       .attr("class","outline")
+       .attr("d", path);
     
     
     // 3a. Import survey data as synchronous calls
-    // "../datasets/state_survey_options.csv"
+    // "../datasets/us-state-names.tsv"
     // "../datasets/state-survey-responses.csv"
-    
+    var surveyData = await d3.csv("../datasets/state-survey-responses.csv");
+    console.log(surveyData);
+    var stateIDs = await d3.tsv("../datasets/us-state-names.tsv");
+    console.log(stateIDs);
     
     // 3b. Generate the counts we will need
+    let stateCounts = {}; // stateCounts[ stateName ] -> count
+    let idToState = {}  // idToState[ stateID ] -> stateName
     
+    stateIDs.forEach( row => {
+      stateCounts[row.name] = 0;
+      idToState[row.id] = row.name;
+    });
+    surveyData.forEach( row => {
+      let splitRow = row.Boxes.split(", ");
+      splitRow.forEach( state => {
+        stateCounts[state] += 1;
+      });
+      
+    });
+    console.log(stateCounts)
     
     // 3c. Make a d3 color scale for frequency    
+    const minMax = d3.extent(stateIDs, d => stateCounts[d.name] );
+    console.log(minMax);
+    
+    const colorScale = d3.scaleSequential(d3.interpolateGnBu).domain(minMax);
     
     
     // 3d. Recolor the states to make a choropleth map
-    
+    map.selectAll(".state")
+       .style("fill", d => colorScale( stateCounts[ idToState[d.id] ]) );
     
     // 3e. Use the extra legend code to draw a legend
-    // drawLegend(d3.select("#colorLegend"), colorScale);
+    drawLegend(d3.select("#colorLegend"), colorScale);
     
-  // };
-  // requestData();
+  };
+  requestData();
 
 
 
