@@ -15,7 +15,6 @@
 
   .state {
     fill: lightgrey;
-    stroke: none;
   }
 
   .outline {
@@ -153,6 +152,67 @@
     
     // 3e. Use the extra legend code to draw a legend
     drawLegend(d3.select("#colorLegend"), colorScale);
+    
+    
+    
+    
+    
+    // 4. Add a tooltip that "sticks" below the state
+    let tooltipWidth = 120;
+    let tooltipHeight = 40;
+    
+    let tooltip = map.append("g")
+                     .attr("class","tooltip")
+                     .attr("visibility","hidden");
+    tooltip.append("rect")
+           .attr("fill", "black")
+           .attr("opacity", 0.9)
+           .attr("width",tooltipWidth)
+           .attr("height",tooltipHeight)
+    let txt = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 2);
+    let txt2 = tooltip.append("text")
+                     .attr("fill", "white")
+                     .attr("text-anchor","middle")
+                     .attr("alignment-baseline","hanging")
+                     .attr("x", tooltipWidth / 2.0)
+                     .attr("y", 22);
+    
+    d3.selectAll(".state").on("mouseenter", mouseEntersPlot);
+    d3.selectAll(".state").on("mouseout",  mouseLeavesPlot);
+
+    function mouseEntersPlot() {
+      
+      tooltip.style("visibility","visible")
+      
+      let state = d3.select(this);
+      state.attr("stroke","black")
+           .attr("stroke-width", 3);
+      
+      
+        
+    }
+
+    function mouseLeavesPlot() {
+      
+     tooltip.style("visibility","hidden");
+     
+     let state = d3.select(this);
+     state.attr("stroke","none")
+          .attr("stroke-width", 0);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
   };
   requestData();
