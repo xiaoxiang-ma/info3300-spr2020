@@ -171,6 +171,8 @@
      // //   Just like with normal scales, you feed them a data value and get back a color/pixel
      // const colorScale = d => d3.interpolateGnBu( d3.scaleSymlog().domain(minMax).range([0,1])(d) );
      // colorScale.domain = () => minMax;  // Hack to get legend working again because it uses scale.domain()
+     // // Another way to do this would be:
+     // const colorScale = d3.scaleLog().domain(minMax).interpolate(d => d3.interpolateGnBu)
     
     
     // 3d. Recolor the states to make a choropleth map
