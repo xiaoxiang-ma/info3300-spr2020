@@ -135,7 +135,6 @@
       splitRow.forEach( state => {
         stateCounts[state] += 1;
       });
-      
     });
     console.log(stateCounts)
     
@@ -143,7 +142,37 @@
     const minMax = d3.extent(stateIDs, d => stateCounts[d.name] );
     console.log(minMax);
     
-    const colorScale = d3.scaleSequential(d3.interpolateGnBu).domain(minMax);
+    // This scale wasn't great because it crunched most of the points to the bottom 3rd of the color scale
+    //  3 state outliers with high values mean it is very distorted
+    // const colorScale = d3.scaleSequential(d3.interpolateGnBu).domain(minMax);
+    
+    // Next, we try quantize, which splits the domain into bins
+    // In general, it splits it into as many bins as you provide items in the range
+    
+    // const colorScale = d3.scaleQuantize()
+    //                      .domain(minMax)
+    //                      .range(["rgb(240, 242, 211)","rgb(217, 219, 106)","rgb(83, 196, 221)","rgb(30, 27, 187)"])
+    
+    
+    // Finally, we use quantile, which looks at the points statistically
+    //  It will give weird results if you send minMax to the .domain(). Why?
+    //  ...because it needs to inspect all of the values in order to see the point distribution
+    //  we use d3.values() here to get all of the values out of the stateCounts dictionary
+    
+    const colorScale = d3.scaleQuantile()
+                         .domain(d3.values(stateCounts))
+                         .range(["#fff","#d1e8ed","#adc2da","#8879b3","#762b80"]);
+    
+                 
+     // //  *** One student suggested using a log scale (which might work well).
+     // //   Here is one way to do this (note the use of Symlog because our domain includes 0)
+     // //   We create a new function that feeds the data value into a Symlog scale programmed to return 0 to 1
+     // //   It then routes the [0,1] value to interpolateGnBu, which returns a color, doing what we want
+     // //   Just like with normal scales, you feed them a data value and get back a color/pixel
+     // const colorScale = d => d3.interpolateGnBu( d3.scaleSymlog().domain(minMax).range([0,1])(d) );
+     // colorScale.domain = () => minMax;  // Hack to get legend working again because it uses scale.domain()
+     // // Another way to do this would be:
+     // const colorScale = d3.scaleLog().domain(minMax).interpolate(d => d3.interpolateGnBu)
     
     
     // 3d. Recolor the states to make a choropleth map
@@ -161,6 +190,8 @@
     let tooltipWidth = 120;
     let tooltipHeight = 40;
     
+    // Stub code to draw the tooltip - we use an SVG element here
+    // You can use an absolute-positioned HTML element, but the positioning requires some more work
     let tooltip = map.append("g")
                      .attr("class","tooltip")
                      .attr("visibility","hidden");
@@ -186,31 +217,43 @@
     d3.selectAll(".state").on("mouseout",  mouseLeavesPlot);
 
     function mouseEntersPlot() {
-      
+      // Make tooltip visible
       tooltip.style("visibility","visible")
       
+      // Find the state SVG element and add stroke
       let state = d3.select(this);
       state.attr("stroke","black")
            .attr("stroke-width", 3);
       
+      // Using .datum() to recover the data for the state element (because we used a .join() to make it)...
+      // ... get the name of the state and count
+      txt.text(idToState[ state.datum().id  ]);
+      txt2.text(stateCounts[ idToState[ state.datum().id  ] ]);
+      
+      // You can use the geoPath() generator to do all sorts of helpful things 
+      // let centroid = path.centroid( state.datum() );  // Get the pixel "center" of the state
+      let bounds = path.bounds( state.datum() );   // Get the pixel boundaries of the state
+      // In both cases here, the geoPath() is parsing the fancy topoJSON data to figure out pixels using the projection
+      
+      // Place it at the bottom of the state, centered
+      let xPos = (bounds[0][0]+bounds[1][0])/2.0 - tooltipWidth/2.0;
+      let yPos = bounds[1][1];
+      
+      // Transform the <g> group so that everything moves together easily
+      tooltip.attr("transform","translate("+xPos+","+yPos+")");
       
         
     }
 
     function mouseLeavesPlot() {
-      
+    
+     // Hide when you leave a state
      tooltip.style("visibility","hidden");
      
      let state = d3.select(this);
      state.attr("stroke","none")
           .attr("stroke-width", 0);
     }
-    
-    
-    
-    
-    
-    
     
     
     

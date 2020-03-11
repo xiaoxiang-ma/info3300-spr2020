@@ -1,0 +1,154 @@
+<html><head>
+<title>INFO 3300 - March 11</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/topojson.v2.min.js"></script>
+  <style>
+
+  #legend span {
+    margin-right: 10px;
+  }
+  
+
+  </style>
+
+</head>
+<body>
+  <div class="container larger">
+  <h3>Notes for March 11</h3>
+  <p>
+    For contour mapping (whether using geography or not), it's better to keep the <a href="https://github.com/topojson/topojson">TopoJSON</a> import around.
+  </p>
+  <p>
+    More on <a href="https://github.com/d3/d3-contour">d3.contour</a>. Here is a <a href="https://observablehq.com/@d3/volcano-contours">contour example</a> and a <a href="https://observablehq.com/@d3/density-contours">density example</a>.
+  </p>
+  <p>
+    Today's data comes from a subsample of a <a href="https://www.kaggle.com/madison88/201920-nhl-playbyplay-data">Kaggle dataset</a> of all recorded NHL game events for the 2019-2020 season.
+  </p>
+
+
+  <h5>HTML for today:</h5>
+
+  <!--- Hockey rink SVG >>> Each pixel is 0.25 feet --->
+  <svg id="hockey" height="350" width="430" style="margin-top:50px" >
+    
+    <g id="contours" transform="translate(20,5)">
+    </g>
+        
+    <g id="rink" transform="translate(20,5)">
+      <line x1="1" x2="1" y1="2" y2="340" style="opacity:0.7;stroke:#aa1111;stroke-width:3;stroke-linecap:round;stroke-dasharray:5,5;"/>
+      <line x1="100" x2="100" y1="0" y2="340" style="opacity:0.7;stroke:#224499;stroke-width:6;"/>
+      <line x1="356" x2="356" y1="2" y2="338" style="opacity:0.7;stroke:#aa1111;stroke-width:3;"/>
+      <path d="M356,158 L338,158 a24,24 1 0,0 0,24 L356,182" style="opacity:0.7;fill:#224499;stroke:#aa1111;stroke-width:3;"/>
+      <rect x="-400" y="0" width="800" height="340" rx="56" ry="56" style="fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke:#000;"/>
+    </g>
+
+  </svg>
+  <div id="legend"> </div>
+  
+  
+
+  <!-- This block will be automatically filled with syntax-highlighted code from the script below -->
+  <h5>Code for today:</h5>
+  <pre>
+    <code id="display1" class="hljs javascript">
+    </code>
+  </pre>
+
+
+  <!--- Code for today's class --->
+  <script id="notes1">
+  
+  
+
+  const requestData = async function() {
+    
+    let layer = d3.select("g#contours");
+    
+    let data = await d3.csv("../datasets/nhl_goals_2019.csv", d3.autoType)
+    console.log(data);
+    
+    // 1. Post-process dataset
+    
+    
+    
+
+    // 2. Build some scales
+    // let xScale = d3.scaleLinear().domain([0,100]).range([0,400]);
+    // let yScale = d3.scaleLinear().domain([0,85]).range([0,340]);
+    // let ordScale = d3.scaleOrdinal(d3.schemeCategory10); 
+    
+    
+    // 2a. Show circles
+    // data.forEach(function(d,i) {
+    // 
+    //   layer.append("circle")
+    //         .attr("r",4)
+    //         .attr("cx", xScale( d['coords_x'] ))
+    //         .attr("cy", yScale( d['coords_y'] ))
+    //         .style("fill",ordScale( d['event_detail'] ))
+    //         .attr("opacity",0.2);
+    // });
+    
+    
+    
+    // 3. Make a contour generator for density
+    
+    
+    
+    // 4. First, visualize all shots
+    
+    
+    
+    
+    // 5. Make a legend for all of the shot types
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+
+    
+  }
+  requestData();
+  
+  
+  
+
+
+
+
+  </script>
+
+
+
+
+
+
+
+
+  <!--- calls the highlight library to fill the <pre> tag with code --->
+  <script>
+  document.getElementById("display1").innerText = document.getElementById("notes1").innerText;
+  hljs.initHighlightingOnLoad();
+  </script>
+
+
+
+  </div>
+</body>
+</html>
